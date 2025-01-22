@@ -31,6 +31,6 @@ public class AIIntegrationService {
 //            System.err.println("Error calling AI model: " + e.getMessage());
 //            return null; // Or return a default response/error message
 //        }
-        return "The output will be displayed here %s".formatted(textQuery);
+        return "SELECT * FROM students";
     }
 }

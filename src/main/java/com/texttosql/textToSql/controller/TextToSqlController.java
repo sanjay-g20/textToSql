@@ -5,6 +5,8 @@ import com.texttosql.textToSql.service.TextToSqlService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class TextToSqlController {
@@ -22,7 +24,18 @@ public class TextToSqlController {
 
     @PostMapping("/execute")
     public ResponseEntity<Object> executeSql(@RequestBody String sqlQuery) {
-        Object results = textToSqlService.executeSqlQuery(sqlQuery);
+//        Object results = textToSqlService.executeSqlQuery(sqlQuery);
+        System.out.println("Trying to execute"+sqlQuery);
+        Object results = textToSqlService.executeDynamicSqlQuery(sqlQuery);
         return ResponseEntity.ok(results);
     }
+
+//    @GetMapping("/students")
+//    public ResponseEntity<List<Student>> getAllStudents() {
+//        List<Student> students = studentService.getAllStudents();
+//        System.out.println(students);
+//        return ResponseEntity.ok(students);
+//    }
+
+
 }
