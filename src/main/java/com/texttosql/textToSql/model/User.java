@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 
 @Entity
+//change to actual table name
 @Table(name = "test-user")
 public class User {
 
