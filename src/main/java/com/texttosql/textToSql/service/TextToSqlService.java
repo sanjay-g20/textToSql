@@ -4,9 +4,6 @@ import com.texttosql.textToSql.model.SqlResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-
 @Service
 public class TextToSqlService {
 
@@ -32,10 +29,11 @@ public class TextToSqlService {
     }
 
     // Method to execute a dynamic SQL query
-    public List<Map<String, Object>> executeDynamicSqlQuery(String sqlQuery) {
+    public String executeDynamicSqlQuery(String sqlQuery) {
         // Execute the query and return the results
         String sqlQueryFromAi = aiIntegrationService.callAiModel(sqlQuery);
-        return jdbcTemplate.queryForList(sqlQueryFromAi);
+        System.out.println("sqlQueryFromAi:"+sqlQueryFromAi);
+        return sqlQueryFromAi;
     }
 
 }
