@@ -13,7 +13,7 @@ import jakarta.persistence.Column;
 
 @Data
 @Entity
-@Table(name = "test-user")
+@Table(name = "app_user")
 public class User {
 
     @Id
