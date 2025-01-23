@@ -27,7 +27,6 @@ public class TextToSqlController {
 //        Object results = textToSqlService.executeSqlQuery(sqlQuery);
         System.out.println("Trying to execute"+sqlQuery);
         Object results = textToSqlService.executeDynamicSqlQuery(sqlQuery);
-        System.out.println("Trying to results"+results);
         return ResponseEntity.ok(results);
     }
 
