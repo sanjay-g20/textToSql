@@ -1,7 +1,9 @@
 package com.texttosql.textToSql.config;
 
+import java.util.Arrays;
 
 import com.texttosql.textToSql.filter.JwtRequestFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,10 +11,16 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 public class SecurityConfig {
@@ -35,17 +43,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable) // Disable CSRF
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // Allow access to `/auth/**`
-                        .anyRequest().authenticated()           // Require authentication for other endpoints
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Stateless session
+        HttpSecurity security = http.csrf(AbstractHttpConfigurer::disable) // Disable CSRF
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/signup", "/auth/login")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
+                        // Require authentication for other endpoints
+                ).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        // Stateless session
                 );
-
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).logout(logoutSpec -> {
+            logoutSpec.logoutUrl("/auth/logout").addLogoutHandler((request, response, authentication) -> {
+                String jwtToken = Arrays.stream(request.getHeader("Authorization").split(" ")).toList().get(1);
+                //blacklistService.addTokenToBlacklist(jwtToken);
+            }).logoutSuccessUrl("/auth/login?logout");
+        }); return security.build();
     }
 
 }
