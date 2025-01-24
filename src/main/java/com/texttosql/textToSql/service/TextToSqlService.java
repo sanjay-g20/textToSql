@@ -22,9 +22,9 @@ public class TextToSqlService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public SqlResponse convertTextToSql(String textQuery) {
-        String sqlQuery = aiIntegrationService.callAiModel(textQuery);
-        //        return (String) executeSqlQuery(sqlQuery);
+    public SqlResponse convertTextToSql(Map<String, String> textQuery) {
+        String sqlQuery = aiIntegrationService.callAiModel(textQuery.get("query"));
+        System.out.println(sqlQuery);
         return new SqlResponse(sqlQuery);
     }
 

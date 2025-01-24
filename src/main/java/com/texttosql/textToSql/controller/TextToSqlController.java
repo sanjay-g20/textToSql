@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -18,7 +19,7 @@ public class TextToSqlController {
     }
 
     @PostMapping("/convert")
-    public SqlResponse convertToSql(@RequestBody String textQuery) {
+    public SqlResponse convertToSql(@RequestBody Map<String,String> textQuery) {
         return textToSqlService.convertTextToSql(textQuery);
     }
 
@@ -30,7 +31,7 @@ public class TextToSqlController {
         return ResponseEntity.ok(results);
     }
 
-//    @GetMapping("/students")
+//    @GetMapping("/students")x
 //    public ResponseEntity<List<Student>> getAllStudents() {
 //        List<Student> students = studentService.getAllStudents();
 //        System.out.println(students);

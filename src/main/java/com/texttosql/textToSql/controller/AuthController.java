@@ -12,6 +12,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -35,10 +38,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(
+    public Map<String, String>  login(
             @RequestBody
             AuthRequest authRequest) {
         try {
+            System.out.println("Inside login:"+authRequest);
             //Uncomment below to check the encoded value/password
             //            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             //            String encodedPassword = encoder.encode("pwd3");
@@ -49,7 +53,14 @@ public class AuthController {
             System.err.println("Error authRequest : " + e.getMessage());
             return null;
         }
-        return jwtUtil.generateToken(authRequest.getUsername());
+        System.out.println(authRequest.getUsername());
+        String token = jwtUtil.generateToken(authRequest.getUsername());
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        response.put("status" , "100");
+
+//        return jwtUtil.generateToken(authRequest.getUsername());
+        return response;
     }
 
 /*    @PostMapping("/logout")
